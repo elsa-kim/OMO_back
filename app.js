@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const authRouter = require("./routes/auth");
+const checkAuth = require("./middleware/auth");
 
 const app = express();
 
@@ -13,6 +14,9 @@ app.use(cors());
 
 // 라우터
 app.use("/auth", authRouter);
+app.get("/test", checkAuth, (req, res) => {
+  res.send({ userId: req.userId });
+});
 
 const URI = process.env.MONGO_URI;
 const PORT = process.env.PORT;

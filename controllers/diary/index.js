@@ -1,5 +1,4 @@
 const Diary = require("../../model/diary");
-const User = require("../../model/user");
 
 exports.getDiary = async (req, res, next) => {
   const { diaryId } = req.params;
@@ -56,15 +55,10 @@ exports.postDiary = async (req, res, next) => {
   });
   try {
     await diary.save();
-    const foundUser = await User.findById(decodedUserId);
-
-    foundUser.board.diaries.push(diary);
-    await foundUser.save();
 
     res.status(201).json({
       message: "diary created!",
       diary: {
-        _id: diary._id,
         name: diary.name,
         title: diary.title,
         content: diary.content,
@@ -73,5 +67,44 @@ exports.postDiary = async (req, res, next) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateDiary = async (req, res) => {
+  const { title, content, name, diaryId } = req.body;
+  const decodedUserId = req.userId;
+
+  try {
+    const foundDiary = await Diary.findOneAndUpdate({ _id: diaryId, creator: decodedUserId }, { title, content, name });
+    if (!foundDiary) {
+      const error = new Error("no diary found");
+      error.statusCode = 404;
+      throw error;
+    }
+    res.status(201).json({
+      message: "update success",
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
+
+exports.deleteDiary = async (req, res) => {
+  const { diaryId } = req.body;
+  const decodedUserId = req.userId;
+
+  try {
+    const deletedDiary = await Diary.findOneAndDelete({ _id: diaryId, creator: decodedUserId });
+    if (!deletedDiary) {
+      const error = new Error("no diary found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.status(201).json({
+      message: "delete success",
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };

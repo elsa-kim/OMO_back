@@ -7,7 +7,7 @@ exports.postSignIn = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password)
-    res.status(400).json({
+    return res.status(400).json({
       message: "email or password cannot be empty",
     });
 
@@ -69,6 +69,7 @@ exports.postSignUp = async (req, res, next) => {
       error.statusCode = 400;
       throw error;
     }
+
     res.status(201).json({ message: "signup success" });
   } catch (error) {
     if (error.code === 11000) return res.status(403).json({ message: "duplicated" });

@@ -17,10 +17,6 @@ app.use(cors());
 app.use("/auth", authRouter);
 app.use("/board", boardRouter);
 
-app.get("/test", checkAuth, (req, res) => {
-  res.send({ userId: req.userId });
-});
-
 const URI = process.env.MONGO_URI;
 const PORT = process.env.PORT;
 

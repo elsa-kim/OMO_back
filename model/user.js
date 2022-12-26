@@ -17,10 +17,16 @@ const userSchema = new Schema(
       required: true,
     },
     board: {
-      diaries: [
+      savedPlaces: [
         {
-          type: Schema.Types.ObjectId,
-          ref: "Diary",
+          placeId: {
+            type: String,
+            required: true,
+          },
+          placeName: {
+            type: String,
+            required: true,
+          },
         },
       ],
     },

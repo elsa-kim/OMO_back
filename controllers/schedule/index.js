@@ -18,10 +18,10 @@ exports.postSchedule = async (req, res) => {
   const { title, content, date } = req.body;
 
   try {
-    await User.findByIdAndUpdate(decodedUserId, {
+    const response = await User.findByIdAndUpdate(decodedUserId, {
       $push: { "board.schedules": { title, content, date } },
     });
-    res.status(201).json({ message: "schedule saved" });
+    res.status(201).json({ message: "schedule saved", schedules: response.board.schedules });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -29,11 +29,11 @@ exports.postSchedule = async (req, res) => {
 
 exports.updateSchedule = async (req, res) => {
   const decodedUserId = req.userId;
-  const { title, content, date, scheduleId } = req.body;
+  const { title, content, date, _id } = req.body;
 
   try {
     const foundUserAndSchedule = await User.updateOne(
-      { _id: decodedUserId, "board.schedules._id": scheduleId },
+      { _id: decodedUserId, "board.schedules._id": _id },
       {
         $set: {
           "board.schedules.$.title": title,
@@ -61,7 +61,7 @@ exports.deleteSchedule = async (req, res) => {
     await User.findByIdAndUpdate(decodedUserId, {
       $pull: { "board.schedules": { _id } },
     });
-    res.status(201).json({ message: "schedule saved" });
+    res.status(201).json({ message: "schedule deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -1,25 +1,33 @@
 const express = require("express");
 const router = express.Router();
 
-const diaryController = require("../../controllers/diary");
+// const diaryController = require('../../controllers/diary');
 const placeController = require("../../controllers/place");
+const scheduleController = require("../../controllers/schedule");
 const checkAuth = require("../../middleware/auth");
 
+// ## - NOT IN USE -
 // -- DIARY --
-// GET - single diary
-router.get("/diary/:diaryId", diaryController.getDiary);
+// router.get('/diary/:diaryId', diaryController.getDiary);
 
-// GET - diaries
-router.get("/diaries", diaryController.getDiaries);
+// router.get('/diaries', diaryController.getDiaries);
 
-// POST - single diary
-router.post("/diary", checkAuth, diaryController.postDiary);
+// router.post('/diary', checkAuth, diaryController.postDiary);
 
-router.patch("/diary", checkAuth, diaryController.updateDiary);
+// router.patch('/diary', checkAuth, diaryController.updateDiary);
 
-router.delete("/diary", checkAuth, diaryController.deleteDiary);
+// router.delete('/diary', checkAuth, diaryController.deleteDiary);
 
-// -- 가볼만한 곳 --
+// -- 일정 --
+router.get("/schedules", checkAuth, scheduleController.getSchedules);
+
+router.post("/schedule", checkAuth, scheduleController.postSchedule);
+
+router.patch("/schedule", checkAuth, scheduleController.updateSchedule);
+
+router.delete("/schedule", checkAuth, scheduleController.deleteSchedule);
+
+// — 가볼만한 곳 —
 router.get("/place/:placeId", checkAuth, placeController.getSavedPlace);
 
 router.get("/places", checkAuth, placeController.getSavedPlaces);

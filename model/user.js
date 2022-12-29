@@ -1,6 +1,37 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const scheduleSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+const savedPlaceSchema = new Schema(
+  {
+    placeId: {
+      type: String,
+      required: true,
+    },
+    placeName: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
 const userSchema = new Schema(
   {
     email: {
@@ -17,18 +48,8 @@ const userSchema = new Schema(
       required: true,
     },
     board: {
-      savedPlaces: [
-        {
-          placeId: {
-            type: String,
-            required: true,
-          },
-          placeName: {
-            type: String,
-            required: true,
-          },
-        },
-      ],
+      schedules: [{ type: scheduleSchema }],
+      savedPlaces: [{ type: savedPlaceSchema }],
     },
   },
   { timestamps: true }

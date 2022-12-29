@@ -39,11 +39,11 @@ exports.getSavedPlaces = async (req, res) => {
 
 exports.postSavePlace = async (req, res) => {
   const decodedUserId = req.userId;
-  const { placeId, placeName } = req.body;
+  const { placeId, placeName, imageUrl } = req.body;
 
   try {
     const foundPlaceByUser = await User.findByIdAndUpdate(decodedUserId, {
-      $push: { "board.savedPlaces": { placeId, placeName } },
+      $push: { "board.savedPlaces": { placeId, placeName, imageUrl } },
     });
 
     if (!foundPlaceByUser) {
